@@ -15,3 +15,8 @@ export const createElement = (type: string, props: Record<string, any> | null, .
     },
   };
 };
+
+// 导出 JSX 运行时所需的函数
+export const jsx = createElement;
+export const jsxs = createElement;
+export const jsxDEV = createElement;

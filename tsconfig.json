@@ -1,0 +1,53 @@
+{
+    "compilerOptions": {
+      // JSX 支持配置
+      "jsx": "react", 
+      "jsxFactory": "createElement",
+      // 基本配置
+      "target": "es6", // 编译目标版本
+      "module": "esnext", // 模块系统
+      "moduleResolution": "node", // 模块解析策略
+      
+      
+      // 模块处理
+      "esModuleInterop": true, // 改善 CommonJS 模块的导入兼容性
+      "allowSyntheticDefaultImports": true, // 允许默认导入非 ES 模块
+      
+      // 路径映射
+      "baseUrl": "./src",
+      "paths": {
+        "@components/*": ["components/*"],
+        "@utils/*": ["utils/*"]
+      },
+      
+      // 输出控制
+      "sourceMap": true, // 生成源映射
+      "declaration": true, // 生成类型声明文件
+      "declarationMap": true, // 为声明文件生成源映射
+      "outDir": "./dist", // 输出目录
+      
+      // React 类型定义
+      "types": ["react", "react-dom", "jest"],
+      
+      // 其他优化
+      "forceConsistentCasingInFileNames": true,
+      "skipLibCheck": true, // 跳过库的类型检查（加速编译）
+      "resolveJsonModule": true // 允许导入 JSON 文件
+    },
+    
+    // 包含的文件/目录
+    "include": [
+      "src/**/*.ts",
+      "src/**/*.tsx",
+      "tests/**/*.ts",
+      "tests/**/*.tsx"
+    ],
+    
+    // 排除的文件/目录
+    "exclude": [
+      "node_modules",
+      "dist",
+      "**/*.spec.ts",
+      "**/*.test.ts"
+    ]
+  }

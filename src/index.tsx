@@ -2,6 +2,7 @@ import { createDom } from "./createDom";
 import { dfs } from "./utils/dfs";
 import { Fiber, Element, TagEnum } from "./types";
 import { updateDom } from "./updateDom";
+import { createElement } from "./createElement";
 
 /** 当前fiber树根节点 */
 var wipRoot: Fiber | null = null;
@@ -60,14 +61,15 @@ const useState = (initial) => {
 
 const commitRoot = () => {
   console.log("进入commit 阶段");
+  console.log('wipRoot',wipRoot)
   // 递归将fiber树中的dom节点添加到dom树中
-  commitWork(wipRoot?.child);
-  // 清空需要删除的fiber列表
-  deletions = [];
-  // 清空下一个 render 的工作单元
-  nextUnitOfWork = null;
-  currentRoot = wipRoot;
-  wipRoot = null;
+//   commitWork(wipRoot?.child);
+//   // 清空需要删除的fiber列表
+//   deletions = [];
+//   // 清空下一个 render 的工作单元
+//   nextUnitOfWork = null;
+//   currentRoot = wipRoot;
+//   wipRoot = null;
 };
 
 const commitWork = (fiber?: Fiber) => {
@@ -213,7 +215,7 @@ const workLoop = (deadline: IdleDeadline) => {
  * @param element 需要渲染的React元素
  * @param container 渲染容器 dom
  */
-export const render = (element: Element, container: HTMLElement) => {
+const render = (element: Element, container: HTMLElement) => {
   wipRoot = null;
   nextUnitOfWork = null;
   shouldYield = false;
@@ -241,11 +243,14 @@ export const render = (element: Element, container: HTMLElement) => {
   return wipRoot;
 };
 
-/** @jsx Didact.createElement */
-function Counter() {
-  const [state, setState] = useState(1);
-  return <h1 onClick={() => setState((c) => c + 1)}>Count: {state}</h1>;
-}
-const element = <Counter />;
+// /** @jsx createElement */
+// function Counter() {
+//   const [state, setState] = useState(1);
+//   return <h1 onClick={() => setState((c) => c + 1)}>Count: {state}</h1>;
+// }
+/** @jsx createElement */
+const element = <h1>My App</h1>;
+// const element = createElement("h1", {}, "My App");
+console.log("element", element);
 const container = document.getElementById("root");
 render(element, container);

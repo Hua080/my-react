@@ -1,4 +1,3 @@
-import { FindByRole } from "@testing-library/react";
 import { Fiber } from "./types";
 export const createDom = (fiber: Fiber) => {
   if (!fiber) {
