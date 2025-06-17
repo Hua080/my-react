@@ -5,13 +5,7 @@ export const createElement = (type: string, props: Record<string, any> | null, .
     type: type,
     props: {
       ...props,
-      children:
-        children?.map((child) => {
-          if (typeof child === "string") {
-            return createElement("TEXT_ELEMENT", { nodeValue: child });
-          }
-          return child;
-        }) || [],
+      children: children?.map((child) => (typeof child === "object" ? child : createElement("TEXT_ELEMENT", { nodeValue: child }))) || [],
     },
   };
 };
