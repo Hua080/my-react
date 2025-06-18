@@ -52,7 +52,6 @@ const useState = (initial) => {
     deletions=[];
     nextUnitOfWork = wipRoot; // workLoop 会在时间空闲时自动执行？
   };
-  console.log('state_wipFiber: ',wipFiber)
 
   wipFiber.hooks.push(hook);
   hookIndex++;
@@ -61,15 +60,16 @@ const useState = (initial) => {
 };
 
 const commitRoot = () => {
-  console.log("进入commit 阶段");
-  console.log('wipRoot',wipRoot)
+  // 删除
+  deletions.forEach(commitWork)
   // 递归将fiber树中的dom节点添加到dom树中
   commitWork(wipRoot?.child);
-//   // 清空需要删除的fiber列表
+  // 清空需要删除的fiber列表
   deletions = [];
-//   // 清空下一个 render 的工作单元
-  nextUnitOfWork = null;
-  currentRoot = wipRoot;
+  
+//   nextUnitOfWork = null; 这里不需要清空，nextUnitOfWork由render阶段的dfs决定
+// wiproot -> currentwip  
+currentRoot = wipRoot;
   wipRoot = null;
 };
 
@@ -190,6 +190,8 @@ const reconcileChildren = (fiber: Fiber) => {
 };
 
 const workLoop = (deadline: IdleDeadline) => {
+    // 开始workloop，刷新时间片
+    shouldYield=false
   // 当有要渲染的工作单元 且 时间片够时 渲染
   while (nextUnitOfWork && !shouldYield) {
     nextUnitOfWork = performUnitOfWork(nextUnitOfWork);
@@ -200,13 +202,11 @@ const workLoop = (deadline: IdleDeadline) => {
   }
   // 当没有要渲染的工作单元 且 时间片够时 进入提交阶段
   if (!nextUnitOfWork && wipRoot) {
-    console.log("render done");
-    console.log('work_loop_wiproot:',wipRoot)
     commitRoot();
   }
   // 时间片用完时，下一个时间片继续执行，每次有检测有无nextUnitOfWork来判断是否刷新
    requestIdleCallback(workLoop);
-  
+   
 };
 
 /**
@@ -245,9 +245,7 @@ const render = (element: Element, container: HTMLElement) => {
 // /** @jsx createElement */
 function Counter() {
   const [state, setState] = useState(1);
-  console.log('state',state)
   return <button onClick={() => {
-    console.log('click')
     setState((c) => c + 1)}}>Count: {state}</button>;
 }
 
@@ -257,6 +255,5 @@ const App = ()=>{
     return (<div><h1>My App</h1><Counter/></div>)
 }
 const element = <App/>;
-console.log("element", element);
 const container = document.getElementById("root");
 render(element, container);
